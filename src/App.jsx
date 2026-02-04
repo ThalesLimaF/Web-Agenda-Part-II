@@ -10,26 +10,39 @@ export default function App() {
   const [cards, setCards] = useState([]);
   const [modoCalendario, setModoCalendario] = useState(false);
 
-  // tema fixo (dark)
-  const tema = "dark";
+  
+  const [tema, setTema] = useState(() => {
+    return localStorage.getItem("tema") || "dark";
+  });
 
   const [session, setSession] = useState(null);
 
+ 
   useEffect(() => {
-    // pega sessão atual
+    localStorage.setItem("tema", tema);
+  }, [tema]);
+
+  useEffect(() => {
+    
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
     });
 
-    // escuta mudanças (login/logout)
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, newSession) => {
-      setSession(newSession);
-    });
+    
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (_event, newSession) => {
+        setSession(newSession);
+      }
+    );
 
     return () => {
       listener?.subscription?.unsubscribe();
     };
   }, []);
+
+  function toggleTema() {
+    setTema((t) => (t === "dark" ? "light" : "dark"));
+  }
 
   function adicionarCard(card) {
     setCards((prev) => [...prev, { ...card, id: Date.now() }]);
@@ -59,11 +72,11 @@ export default function App() {
 
   const emDia = cards.length - atrasados;
 
-  // ✅ se não estiver logado, mostra Login real
+  
   if (!session) {
     return (
       <div className={`app ${tema}`}>
-        <Navbar />
+        <Navbar tema={tema} onToggleTema={toggleTema} />
         <Login />
       </div>
     );
@@ -71,10 +84,10 @@ export default function App() {
 
   return (
     <div className={`app ${tema}`}>
-      <Navbar />
+      <Navbar tema={tema} onToggleTema={toggleTema} />
 
       <div className="container">
-        {/* 👤 barra do usuário + sair */}
+        
         <div className="userbar">
           <span className="userchip">✅ {session.user.email}</span>
           <button

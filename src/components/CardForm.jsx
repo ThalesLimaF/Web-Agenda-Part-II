@@ -5,8 +5,7 @@ export default function CardForm({ onAdd }) {
   const [data, setData] = useState("");
   const [erro, setErro] = useState("");
 
-  // ✅ REGEXP: 3–80 chars, não permite só espaços
-  // permite letras (inclui acentos), números e alguns símbolos comuns
+ 
   const lembreteRegex = /^(?=.{3,80}$)(?!\s*$)[\p{L}\p{N}\s.,!?()\-:;'"@#%&/]+$/u;
 
   function salvar(e) {

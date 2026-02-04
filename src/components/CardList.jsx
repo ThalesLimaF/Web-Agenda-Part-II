@@ -3,9 +3,9 @@ export default function CardList({ cards, onConcluir, onEditarData }) {
   hoje.setHours(0, 0, 0, 0);
 
   function toISO(data) {
-    // aceita "YYYY-MM-DD" ou "DD/MM/YYYY"
+    
     if (!data) return "";
-    if (data.includes("-")) return data; // já ISO
+    if (data.includes("-")) return data; 
     const [dia, mes, ano] = data.split("/");
     return `${ano}-${mes.padStart(2, "0")}-${dia.padStart(2, "0")}`;
   }
@@ -21,7 +21,7 @@ export default function CardList({ cards, onConcluir, onEditarData }) {
     return parseData(data) < hoje.getTime();
   }
 
-  // Ordena: atrasados primeiro, depois por data
+  
   const cardsOrdenados = [...cards].sort((a, b) => {
     const atrasoA = estaAtrasado(a.data);
     const atrasoB = estaAtrasado(b.data);
@@ -30,7 +30,7 @@ export default function CardList({ cards, onConcluir, onEditarData }) {
     return parseData(a.data) - parseData(b.data);
   });
 
-  // Agrupar por data (chave normalizada em ISO pra não duplicar)
+  
   const grupos = {};
   cardsOrdenados.forEach((card) => {
     const chave = toISO(card.data);

@@ -1,20 +1,15 @@
-import { useState } from "react";
-
-export default function Navbar() {
-  const [dark, setDark] = useState(false);
-
-  function toggleTheme() {
-    document.body.classList.toggle("dark");
-    setDark(!dark);
-  }
-
+export default function Navbar({ tema, onToggleTema }) {
   return (
-    <nav className="navbar">
-      <h1>📒 Web Agenda</h1>
+    <header className="navbar">
+      <div className="navbar-left">
+        <span className="brand-emoji">📒</span>
+        <span className="brand-title">Web Agenda</span>
+      </div>
 
-      <button className="theme-btn" onClick={toggleTheme}>
-        {dark ? "☀️" : "🌙"}
+      <button className="theme-switch" onClick={onToggleTema} type="button">
+        <span className="theme-icon">{tema === "dark" ? "🌙" : "🌞"}</span>
+        <span className="theme-text">{tema === "dark" ? "Dark" : "Light"}</span>
       </button>
-    </nav>
+    </header>
   );
 }
